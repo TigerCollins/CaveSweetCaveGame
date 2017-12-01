@@ -24,6 +24,7 @@ public class FirstPersonController : MonoBehaviour
     public float StepDistance;
     public float StepTracker;
 
+    
     private void Awake()
     {
         //Finding input controller on object
@@ -67,8 +68,16 @@ public class FirstPersonController : MonoBehaviour
         transform.position += movementVector.normalized * moveSpeed * Time.deltaTime;
 
         //Character Jumping
-        if (inputController.jumpButtomDown)
-            GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        
+
+        if (GetComponent<Rigidbody>().velocity.y <= 0)
+        {
+            if (inputController.jumpButtomDown)
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            }
+        }
+            
 
         //Character Footsteps
         if(movementVector.magnitude > 0)
