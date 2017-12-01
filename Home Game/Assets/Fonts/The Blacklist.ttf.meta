@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 0c925e3ce182d824da5cf1e117441151
+timeCreated: 1511843736
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: The Blacklist
+  fontNames:
+  - The Blacklist
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

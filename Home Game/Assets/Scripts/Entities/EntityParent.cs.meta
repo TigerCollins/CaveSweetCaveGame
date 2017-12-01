@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c5e56ac9bebbad144afeaa4dc1d638c8
+timeCreated: 1511870152
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - rootObject: {instanceID: 0}
+  - CollisionClip: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
