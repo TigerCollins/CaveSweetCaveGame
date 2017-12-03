@@ -16,6 +16,7 @@ public class Entity : MonoBehaviour
     public bool Burnable;
     public float BurnTime;
 
+
     private void Awake()
     {
         if(transform.parent != null)
@@ -30,7 +31,7 @@ public class Entity : MonoBehaviour
             InstantiateEntityParent();
         }
 
-        stickyColour = Color.green;
+        stickyColour = Color.blue;
         normalColour = GetComponent<Renderer>().material.color;
 
         this.transform.parent.gameObject.GetComponent<Rigidbody>().isKinematic = true;

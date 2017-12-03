@@ -9,6 +9,7 @@ public class Cave_Enter : MonoBehaviour
         if (other.gameObject.GetComponent<PlayerController>() != null)
         {
             other.gameObject.GetComponent<PlayerController>().inCave = true;
+            PlayerController.instance.glueBerries = 9999999999999999;
             BGMController.instance.ChangeMusic(2);
         }
     }

@@ -74,7 +74,27 @@ public class InteractionController : MonoBehaviour
 
     void TryGlue()
     {
-        if(playerController.dayNightControl.currentTime > 0.25f && playerController.dayNightControl.currentTime < 0.75f)
+        if (PlayerController.instance.inCave == false)
+        {
+            if (playerController.dayNightControl.currentTime > 0.25f && playerController.dayNightControl.currentTime < 0.75f)
+            {
+                //Enable the children colliders
+                for (int i = 0; i < grabbedObject.transform.childCount; i++)
+                {
+                    if (grabbedObject.transform.GetChild(i).gameObject.GetComponent<Entity>().sticky)
+                    {
+                        grabbedObject.transform.GetChild(i).gameObject.GetComponent<Entity>().RemoveSticky();
+                    }
+                    else
+                    {
+                        grabbedObject.transform.GetChild(i).gameObject.GetComponent<Entity>().MakeSticky();
+                        PlayerController.instance.glueBerries -= 1;
+                    }
+                }
+            }
+        }
+
+        if (PlayerController.instance.inCave == true)
         {
             //Enable the children colliders
             for (int i = 0; i < grabbedObject.transform.childCount; i++)
@@ -86,6 +106,7 @@ public class InteractionController : MonoBehaviour
                 else
                 {
                     grabbedObject.transform.GetChild(i).gameObject.GetComponent<Entity>().MakeSticky();
+                    PlayerController.instance.glueBerries -= 1;
                 }
             }
         }

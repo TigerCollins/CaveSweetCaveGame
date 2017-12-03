@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     public bool inCave;
 
-
+    public Text GlueBerryCounter;
 
     //Module Controller Objects
     public InputController inputController;
@@ -49,6 +50,17 @@ public class PlayerController : MonoBehaviour
         //If you have a strength boost, run the update code
         if (strengthBoostTimer > 0)
             UpdateStrengthBoost();
+
+        //Updates the glueberry counter
+        if (glueBerries > 3)
+        {
+            GlueBerryCounter.text = "∞";
+        }
+
+        else
+        {
+            GlueBerryCounter.text = glueBerries.ToString();
+        }
     }
 
     public void BoostStrength(float _boostAmount, float _boostTime)

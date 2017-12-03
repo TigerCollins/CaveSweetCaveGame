@@ -9,8 +9,9 @@ public class Cave_Exit : MonoBehaviour
         if(other.gameObject.GetComponent<PlayerController>() != null)
         {
             other.gameObject.GetComponent<PlayerController>().inCave = false;
+            PlayerController.instance.glueBerries = 3;
 
-            if(PlayerController.instance.dayNightControl.currentTime > 0.25f && PlayerController.instance.dayNightControl.currentTime < 0.75f)
+            if (PlayerController.instance.dayNightControl.currentTime > 0.25f && PlayerController.instance.dayNightControl.currentTime < 0.75f)
             {
                 BGMController.instance.ChangeMusic(0);
             }
@@ -19,6 +20,7 @@ public class Cave_Exit : MonoBehaviour
                 BGMController.instance.ChangeMusic(1);
             }
         }
+       
     }
 
 }

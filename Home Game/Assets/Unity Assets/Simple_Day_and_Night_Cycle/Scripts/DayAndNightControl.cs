@@ -1,6 +1,7 @@
 ﻿//2016 Spyblood Games
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class DayAndNightControl : MonoBehaviour {
@@ -20,6 +21,9 @@ public class DayAndNightControl : MonoBehaviour {
 
     bool WipedAllGlue = false;
 
+    //UI
+    public Text TimeOfDay;
+
 	// Use this for initialization
 	void Start () {
 		lightIntensity = directionalLight.intensity; //what's the current intensity of the light
@@ -36,6 +40,9 @@ public class DayAndNightControl : MonoBehaviour {
 			currentTime = 0;//once we hit "midnight"; any time after that sunrise will begin.
 			currentDay++; //make the day counter go up
 		}
+
+        //Update UI
+        TimeOfDay.text = DayState;
 
         //wipe all the glue at midnight
         if(currentTime > 0.9f)
@@ -105,12 +112,12 @@ public class DayAndNightControl : MonoBehaviour {
 		}
 		if (currentTime > 0.25f)
 		{
-			DayState = "Morning";
+			DayState = "Dawn";
 
 		}
 		if (currentTime > 0.25f && currentTime < 0.5f)
 		{
-			DayState = "Mid Noon";
+			DayState = "Day Time";
 		}
 		if (currentTime > 0.5f && currentTime < 0.75f)
 		{

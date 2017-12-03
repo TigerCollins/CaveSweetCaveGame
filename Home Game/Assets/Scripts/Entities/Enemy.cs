@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
 
     public AudioClip EnemyExplosionClip;
 
+    public bool CanMove = true;
+
     private void Awake()
     {
         player = PlayerController.instance;
@@ -26,9 +28,18 @@ public class Enemy : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         UpdateMovement();
+        if(PlayerController.instance.inCave==true)
+        {
+            CanMove = false;
+        }
+
+        else
+        {
+            CanMove = true;
+        }
 
         if(player.dayNightControl.currentTime > 0.25f && player.dayNightControl.currentTime < 0.75f)
         {
@@ -38,7 +49,10 @@ public class Enemy : MonoBehaviour
 
     void UpdateMovement()
     {
-        transform.Translate((player.transform.position - gameObject.transform.position).normalized * Time.deltaTime * speed);
+        if (CanMove == false)
+        {
+            transform.Translate((player.transform.position - gameObject.transform.position).normalized * Time.deltaTime * speed);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

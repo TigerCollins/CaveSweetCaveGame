@@ -5,6 +5,7 @@ using UnityEngine;
 public class InputController : MonoBehaviour
 {
     public bool invertY;
+    public bool Pause;
 
     public float xLookInput
     {
@@ -66,15 +67,23 @@ public class InputController : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start ()
+    void Update ()
     {
         LockAndHideCursor();
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Pause = true;
+        }
     }
 
     void LockAndHideCursor()
     {
-        //Locking and hiding the cursor by default
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (Pause == false)
+        {
+            //Locking and hiding the cursor by default
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 }
