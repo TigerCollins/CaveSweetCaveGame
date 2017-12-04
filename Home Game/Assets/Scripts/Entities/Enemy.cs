@@ -72,6 +72,40 @@ public class Enemy : MonoBehaviour
 
             Destroy(this.gameObject);
         }
+
+        if (other.gameObject.tag == "Home")
+        {
+            Debug.Log("Collided with home");
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            Vector3 explosionForce = (player.transform.position - gameObject.transform.position).normalized * outwardForce;
+            explosionForce.y = upwardForce;
+
+            rb.AddForce(explosionForce, ForceMode.Impulse);
+
+            other.gameObject.GetComponent<InteractionController>().TryDrop();
+
+            SFXController.instance.SpawnAudioBomb(this.transform.position, EnemyExplosionClip, 1);
+
+            Destroy(this.gameObject);
+        }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Home")
+        {
+            Debug.Log("Collided with home");
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            Vector3 explosionForce = (player.transform.position - gameObject.transform.position).normalized * outwardForce;
+            explosionForce.y = upwardForce;
+
+            rb.AddForce(explosionForce, ForceMode.Impulse);
+
+            other.gameObject.GetComponent<InteractionController>().TryDrop();
+
+            SFXController.instance.SpawnAudioBomb(this.transform.position, EnemyExplosionClip, 1);
+
+            Destroy(this.gameObject);
+        }
+    }
 }

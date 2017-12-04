@@ -138,9 +138,18 @@ public class InteractionController : MonoBehaviour
                     hit.collider.gameObject.GetComponent<Berry>().Activate(playerController);
                 }
 
-                if(hit.collider.tag == "Bed")
+                
+                if (hit.collider.tag == "Bed")
                 {
-                    Sleep();
+                    if (playerController.dayNightControl.currentTime < 0.25f || playerController.dayNightControl.currentTime > 0.75f)
+                    {
+                        Sleep();
+                    }
+
+                    if (playerController.dayNightControl.currentTime > 0.25f || playerController.dayNightControl.currentTime < 0.75f)
+                    {
+                        GrabObject(hit.collider.gameObject);
+                    }
                 }
             }
 
@@ -341,6 +350,11 @@ public class InteractionController : MonoBehaviour
 
         foreach(GameObject parent in GameObject.FindGameObjectsWithTag("EntityParent"))
         {
+            Entity en = parent.GetComponentInChildren<Entity>();
+            if (en != null && en.inHome)
+            {
+                continue;
+            }
             allParentObjects.Add(parent);
             
         }

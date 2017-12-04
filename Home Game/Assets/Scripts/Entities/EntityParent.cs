@@ -40,11 +40,19 @@ public class EntityParent : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("Triggered");
+        if (other.CompareTag("Home"))
+        {
+            return;
+        }
         collidingWithWorld = true;
     }
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.CompareTag("Home"))
+        {
+            return;
+        }
         collidingWithWorld = true;
     }
 

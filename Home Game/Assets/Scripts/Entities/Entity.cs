@@ -16,6 +16,8 @@ public class Entity : MonoBehaviour
     public bool Burnable;
     public float BurnTime;
 
+    public bool inHome = false;
+
 
     private void Awake()
     {
@@ -98,6 +100,22 @@ public class Entity : MonoBehaviour
         GetComponent<MeshRenderer>().material.color = normalColour;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Home"))
+        {
+            inHome = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Home"))
+        {
+            inHome = false;
+        }
+    }
+
     ////If this object touches an object that is sticky, it turns kinimatic and sets its parent to that object
     //private void OnCollisionEnter(Collision collision)
     //{
@@ -160,7 +178,7 @@ public class Entity : MonoBehaviour
     //                entityParent.GetComponent<Rigidbody>().ResetCenterOfMass();
     //                entityParent.GetComponent<Rigidbody>().ResetInertiaTensor();
     //            }
-                
+
     //        }
     //    }
     //}
