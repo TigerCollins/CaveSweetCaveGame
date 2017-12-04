@@ -146,7 +146,7 @@ public class InteractionController : MonoBehaviour
                         Sleep();
                     }
 
-                    if (playerController.dayNightControl.currentTime > 0.25f || playerController.dayNightControl.currentTime < 0.75f)
+                    if (playerController.dayNightControl.currentTime > 0.25f && playerController.dayNightControl.currentTime < 0.75f)
                     {
                         GrabObject(hit.collider.gameObject);
                     }
