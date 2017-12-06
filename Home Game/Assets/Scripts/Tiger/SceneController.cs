@@ -44,7 +44,7 @@ using UnityStandardAssets.ImageEffects;
         {
             MainMenu();
 
-            if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown("joystick button 7"))
             {
                 Pause();
             }
@@ -128,7 +128,7 @@ using UnityStandardAssets.ImageEffects;
             PauseMenu.SetActive(false);
             OptionsGroup.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        Cursor.visible = false;
         InputController.instance.Pause = false;
     }
 

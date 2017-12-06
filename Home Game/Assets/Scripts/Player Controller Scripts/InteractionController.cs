@@ -27,9 +27,14 @@ public class InteractionController : MonoBehaviour
 
         public GameObject aimingReticle;
 
+    public float MaxScrollDistance;
+    public float MinScrollDistance;
+
     public GameObject OpenHandUI;
     public GameObject ClosedHandUI;
     public GameObject SleepUI;
+
+    public float InvertValue;
 
         private void Awake()
         {
@@ -40,13 +45,14 @@ public class InteractionController : MonoBehaviour
         }
 
         // Update is called once per frame
-        void Update()
+        public void Update()
         {
+        print(Input.GetAxis("Axis 9") > 0);
+        print(Input.GetAxis("Axis 5") > 0);
+        //Check to see if any relevent input has been triggered
+        CheckInput();
 
-            //Check to see if any relevent input has been triggered
-            CheckInput();
-
-            if (grabbedObject == null)
+            if (grabbedObject != null)
         {
             DepthOfField.instance.focalTransform = null;
             DepthOfField.instance.focalDistance01 = 14.82f;
@@ -114,14 +120,36 @@ public class InteractionController : MonoBehaviour
                 HoldingItem = false;
             }
 
-            //Temp dodgy scroll code
+        // Controller Reticle Zoom
+        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MinScrollDistance))
+        {
+            aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * -1;
+        }
+
+        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MaxScrollDistance))
+        {
+            aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * 1;
+        }
+
+        //Keyboard Reticle Zoom
+        if (Input.mouseScrollDelta.y > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MinScrollDistance)
+        {
             aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * Input.mouseScrollDelta.y;
         }
 
-        void CheckInput()
+        if (Input.mouseScrollDelta.y < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MaxScrollDistance)
+        {
+            aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * Input.mouseScrollDelta.y;
+        }
+
+        }
+
+
+
+        public void CheckInput()
         {
             //Grab and Drop Input
-            if (inputController.grabButtonDown)
+            if (inputController.grabButtonDown > 0)
             {
                 //If you dont have an object, try and grab one
                 if (grabbedObject == null)
@@ -378,26 +406,26 @@ public class InteractionController : MonoBehaviour
             grabbedObject.transform.position = Vector3.Lerp(grabbedObject.transform.position, firstPersonController.AimingReticle.transform.position, grabLerpSpeed);
 
             //myQuaternion 
-            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Keypad4))
+            if ((Input.GetAxis("Axis 9")>0) && (Input.GetAxis("Horizontal")>0))
             {
                 grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.HorizontalTurntable.transform.up, rotationSpeed);
             }
 
             //myQuaternion 
-            if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Keypad6))
-            {
+            if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Horizontal") < 0))
+        {
                 grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.HorizontalTurntable.transform.up, -rotationSpeed);
             }
 
             //myQuaternion 
-            if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Keypad8))
+            if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Keypad8) || (Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Vertical") < 0))
             {
                 grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.VerticalTurntable.transform.right, rotationSpeed);
             }
 
             //myQuaternion 
-            if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Keypad2))
-            {
+            if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Keypad2) || (Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Vertical") > 0))
+        {
                 grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.VerticalTurntable.transform.right, -rotationSpeed);
             }
 

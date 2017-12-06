@@ -52,7 +52,8 @@ public class Enemy : MonoBehaviour
     void UpdateMovement()
     {
 
-            transform.Translate((PlayerController.instance.transform.position - gameObject.transform.position).normalized * Time.deltaTime * speed);
+        transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, Time.deltaTime * speed);
+        //transform.Translate((PlayerController.instance.transform.position - gameObject.transform.position).normalized * Time.deltaTime * speed);
 
     }
 

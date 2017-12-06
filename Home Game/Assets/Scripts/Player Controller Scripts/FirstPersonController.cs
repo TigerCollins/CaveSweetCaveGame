@@ -1,6 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+using UnityStandardAssets.ImageEffects;
 
 public class FirstPersonController : MonoBehaviour
 {
@@ -27,6 +31,10 @@ public class FirstPersonController : MonoBehaviour
     public float StepDistance;
     public float StepTracker;
 
+    public Vector3 movementVector;
+
+    public bool HoldingItems;
+
     private void Awake()
     {
         //Finding input controller on object
@@ -36,35 +44,71 @@ public class FirstPersonController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        HoldingItems = true;
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    public void FixedUpdate()
     {
+        //GET HELP WITH THIS
+       // if (InteractionController.instance.grabbedObject == null)
+     //   {
+            if ((Input.GetAxis("Axis 9") > 0))
+            {
+                if ((Input.GetAxis("Horizontal")) != 0 && (Input.GetAxis("Vertical") != 0))
+                {
+                    movementVector = Vector3.zero;
+                }
+            }
+      //  }
 
 
-
-        //Horizontal Camera Rotation
-        HorizontalTurntable.transform.localRotation *= Quaternion.Euler(0, inputController.xLookInput * xCameraSensitivity * Time.deltaTime, 0);
-
-        //If the next step is gonna be over the cap, do not proceed. PS: i am god
-        if (VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) < minAngle || VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) > maxAngle)
-        {
-            //Do nothing
-        }
         else
         {
-            //Vertical Camera Rotation
-            VerticalTurntable.transform.localRotation *= Quaternion.Euler(inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1), 0, 0);
-            //Tracking verticle turntable looking
-            VerticleLookTracker += inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1);
+            //Calculate Movement Vector
+            movementVector = (HorizontalTurntable.transform.forward * inputController.yMoveInput) + (HorizontalTurntable.transform.right * inputController.xMoveInput);
         }
 
-        //Calculate Movement Vector
-        Vector3 movementVector = (HorizontalTurntable.transform.forward * inputController.yMoveInput) + (HorizontalTurntable.transform.right * inputController.xMoveInput);
-        //Normalizing the movement vector and apply to object
-        transform.position += movementVector.normalized * moveSpeed * Time.deltaTime;
+
+            //Horizontal Camera Rotation
+            HorizontalTurntable.transform.localRotation *= Quaternion.Euler(0, inputController.xLookInput * xCameraSensitivity * Time.deltaTime, 0);
+
+            //If the next step is gonna be over the cap, do not proceed. PS: i am god
+            if (VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) < minAngle || VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) > maxAngle)
+            {
+                //Do nothing
+            }
+            else
+            {
+                //Vertical Camera Rotation
+                VerticalTurntable.transform.localRotation *= Quaternion.Euler(inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1), 0, 0);
+                //Tracking verticle turntable looking
+                VerticleLookTracker += inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1);
+            }
+ 
+            if((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") > 0))
+        {
+            print("cool");
+            yCameraSensitivity = 0;
+            xCameraSensitivity = 0;
+        }
+
+        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") < 0))
+        {
+            print("cool");
+            yCameraSensitivity = 0;
+            xCameraSensitivity = 0;
+        }
+
+        else
+        {
+            yCameraSensitivity = 75;
+            xCameraSensitivity = 75;
+        }
+
+
+            //Normalizing the movement vector and apply to object
+            transform.position += movementVector.normalized * moveSpeed * Time.deltaTime;
 
         //Character Jumping
         if (inputController.jumpButtomDown && onGround)

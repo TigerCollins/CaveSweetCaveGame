@@ -17,14 +17,14 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            return Input.GetAxis("Mouse X");
+            return Input.GetAxis("Axis 4");
         }
     }
     public float yLookInput
     {
         get
         {
-            return Input.GetAxis("Mouse Y");
+            return Input.GetAxis("Axis 5");
         }
     }
     public float xMoveInput
@@ -45,22 +45,23 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            return Input.GetKeyDown(KeyCode.Space);
+            return Input.GetKeyDown("joystick button 0");
         }
     }
-    public bool grabButtonDown
+    public float grabButtonDown
     {
         get
-        {
-            return Input.GetMouseButtonDown(0);
-        }
+      {
+            return Input.GetAxis("Axis 10");
+      }
     }
 
     public bool glueButtonDown
     {
         get
         {
-            return Input.GetMouseButtonDown(1);
+            return Input.GetKeyDown("joystick button 2");
+            print("X was pressed");
         }
     }
 
@@ -68,7 +69,7 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            return Input.GetKeyDown(KeyCode.Z);
+            return Input.GetKeyDown("joystick button 3");
         }
     }
 
@@ -78,7 +79,7 @@ public class InputController : MonoBehaviour
         LockAndHideCursor();
         ToggleButton();
 
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape)|| Input.GetKeyDown("joystick button 7"))
         {
             Pause = true;
         }
@@ -110,12 +111,12 @@ public class InputController : MonoBehaviour
     {
         if(isInvertY.isOn == true)
         {
-            invertY = false;
+            invertY = true;
         }
 
         if (isInvertY.isOn == false)
         {
-            invertY = true;
+            invertY = false;
         }
         
     }
