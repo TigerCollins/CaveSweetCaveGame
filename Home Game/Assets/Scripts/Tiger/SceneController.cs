@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.ImageEffects;
 
-
-namespace UnityStandardAssets.ImageEffects
-{
     public class SceneController : MonoBehaviour
     {
         public static SceneController instance;
 
         [Header("Scene Controller")]
         public string SceneName;
+    public GameObject LoadingScreen;
 
         [Header("Main Menu Items")]
         public GameObject SplashScreen;
@@ -19,6 +18,11 @@ namespace UnityStandardAssets.ImageEffects
         public GameObject Cam;
         public GameObject Menu;
         public GameObject CreditsGroup;
+
+        [Header("Options Items")]
+        public GameObject OptionsGroup;
+        public GameObject KeyboardGroup;
+        public GameObject ControllerGroup;
 
         [Header("Game Scene Items")]
         public GameObject PauseMenu;
@@ -28,6 +32,9 @@ namespace UnityStandardAssets.ImageEffects
         {
             Scene CurrentScene = SceneManager.GetActiveScene();
             SceneName = CurrentScene.name;
+
+            
+            
 
             //  CreditsGroup.SetActive(false);
         }
@@ -49,6 +56,8 @@ namespace UnityStandardAssets.ImageEffects
             {
                 if (Input.anyKey)
                 {
+                    //PlayerPref for invertY. 1 = non inverted
+                    PlayerPrefs.SetInt("InvertY", 1);
                     DepthOfField.instance.focalTransform = MenuLookPoint.transform;
                 }
             }
@@ -62,7 +71,30 @@ namespace UnityStandardAssets.ImageEffects
 
         public void Options()
         {
-            print("Options");
+            OptionsGroup.SetActive(true);
+            Menu.SetActive(false);
+        }
+
+        public void OptionsKeyboard()
+        {
+            KeyboardGroup.SetActive(true);
+            ControllerGroup.SetActive(false);
+        }
+
+        public void OptionsController()
+        {
+            ControllerGroup.SetActive(true);
+            KeyboardGroup.SetActive(false);
+        }
+
+        public void IngameOptions()
+        {
+            OptionsGroup.SetActive(true);
+        }
+
+        public void CloseIngameOptions()
+        {
+            OptionsGroup.SetActive(false);
         }
 
         public void Credits()
@@ -75,11 +107,13 @@ namespace UnityStandardAssets.ImageEffects
         {
             CreditsGroup.SetActive(false);
             Menu.SetActive(true);
+            OptionsGroup.SetActive(false);
         }
 
         public void NewGame()
         {
-            Application.LoadLevel("World");
+        LoadingScreen.SetActive(true);
+        Application.LoadLevel("World");
         }
 
         public void Pause()
@@ -92,12 +126,17 @@ namespace UnityStandardAssets.ImageEffects
         {
             Time.timeScale = 1;
             PauseMenu.SetActive(false);
-        }
+            OptionsGroup.SetActive(false);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        InputController.instance.Pause = false;
+    }
 
         public void QuitMenu()
         {
-            Time.timeScale = 1;
+        LoadingScreen.SetActive(true);
+        Time.timeScale = 1;
             Application.LoadLevel("Menu");
         }
     }
-}
+

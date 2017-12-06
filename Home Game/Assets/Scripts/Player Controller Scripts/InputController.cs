@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
+    //Singlton Instance
+    public static InputController instance;
+
+    public Toggle isInvertY;
+
     public bool invertY;
     public bool Pause;
 
@@ -63,7 +68,7 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            return Input.GetKeyDown(KeyCode.Alpha2);
+            return Input.GetKeyDown(KeyCode.Z);
         }
     }
 
@@ -71,6 +76,7 @@ public class InputController : MonoBehaviour
     void Update ()
     {
         LockAndHideCursor();
+        ToggleButton();
 
         if (Input.GetKey(KeyCode.Escape))
         {
@@ -99,4 +105,19 @@ public class InputController : MonoBehaviour
     {
         Pause = false;
     }
+
+    public void ToggleButton()
+    {
+        if(isInvertY.isOn == true)
+        {
+            invertY = false;
+        }
+
+        if (isInvertY.isOn == false)
+        {
+            invertY = true;
+        }
+        
+    }
+    
 }

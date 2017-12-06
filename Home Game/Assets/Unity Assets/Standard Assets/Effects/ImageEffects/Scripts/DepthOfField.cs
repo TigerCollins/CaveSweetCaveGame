@@ -49,12 +49,20 @@ namespace UnityStandardAssets.ImageEffects
         public float dx11BokehScale = 1.2f;
         public float dx11BokehIntensity = 2.5f;
 
-        private float focalDistance01 = 10.0f;
+        public float focalDistance01 = 10.0f;
         private ComputeBuffer cbDrawArgs;
         private ComputeBuffer cbPoints;
         private float internalBlurWidth = 1.0f;
 
         private Camera cachedCamera;
+
+        public void Update()
+        {
+           //if (InteractionController.instance.aimingReticle == true)
+          // {
+          //     print("boi");
+          // }
+        }
 
         public void Awake()
         {
