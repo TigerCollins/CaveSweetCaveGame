@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
             CanMove = true;
         }
 
-        if(player.dayNightControl.currentTime > 0.25f && player.dayNightControl.currentTime < 0.75f)
+  if(PlayerController.instance.dayNightControl.currentTime > 0.25f && PlayerController.instance.dayNightControl.currentTime < 0.75f)
         {
             Destroy(this.gameObject);
         }
@@ -51,10 +51,8 @@ public class Enemy : MonoBehaviour
 
     void UpdateMovement()
     {
-
         transform.position = Vector3.MoveTowards(transform.position, PlayerController.instance.transform.position, Time.deltaTime * speed);
         //transform.Translate((PlayerController.instance.transform.position - gameObject.transform.position).normalized * Time.deltaTime * speed);
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -63,7 +61,7 @@ public class Enemy : MonoBehaviour
         {
             Debug.Log("Collided with player");
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
-            Vector3 explosionForce = (player.transform.position - gameObject.transform.position).normalized * outwardForce;
+            Vector3 explosionForce = (PlayerController.instance.transform.position - gameObject.transform.position).normalized * outwardForce;
             explosionForce.y = upwardForce;
 
             rb.AddForce(explosionForce, ForceMode.Impulse);
@@ -90,6 +88,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.tag == "Home")
         {
+            isHome = true;
             Debug.Log("Collided with home");
 
             SFXController.instance.SpawnAudioBomb(this.transform.position, EnemyExplosionClip, 1);

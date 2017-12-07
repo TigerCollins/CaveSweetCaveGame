@@ -61,7 +61,6 @@ public class InputController : MonoBehaviour
         get
         {
             return Input.GetKeyDown("joystick button 2");
-            print("X was pressed");
         }
     }
 

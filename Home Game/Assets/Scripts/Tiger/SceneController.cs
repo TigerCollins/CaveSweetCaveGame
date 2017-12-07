@@ -129,7 +129,6 @@ using UnityStandardAssets.ImageEffects;
             OptionsGroup.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = false;
-        InputController.instance.Pause = false;
     }
 
         public void QuitMenu()

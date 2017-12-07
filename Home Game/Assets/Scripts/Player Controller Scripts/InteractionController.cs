@@ -34,7 +34,7 @@ public class InteractionController : MonoBehaviour
     public GameObject ClosedHandUI;
     public GameObject SleepUI;
 
-    public float InvertValue;
+    
 
         private void Awake()
         {
@@ -45,10 +45,8 @@ public class InteractionController : MonoBehaviour
         }
 
         // Update is called once per frame
-        public void Update()
+        public void FixedUpdate()
         {
-        print(Input.GetAxis("Axis 9") > 0);
-        print(Input.GetAxis("Axis 5") > 0);
         //Check to see if any relevent input has been triggered
         CheckInput();
 
@@ -121,23 +119,26 @@ public class InteractionController : MonoBehaviour
             }
 
         // Controller Reticle Zoom
-        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MinScrollDistance))
+        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MinScrollDistance))
         {
+              print("Within Min Y");
             aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * -1;
         }
 
-        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MaxScrollDistance))
+        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MaxScrollDistance))
         {
+            print("Within Max Y");
+
             aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * 1;
         }
 
         //Keyboard Reticle Zoom
-        if (Input.mouseScrollDelta.y > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MinScrollDistance)
+        if (Input.mouseScrollDelta.y > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MinScrollDistance)
         {
             aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * Input.mouseScrollDelta.y;
         }
 
-        if (Input.mouseScrollDelta.y < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MaxScrollDistance)
+        if (Input.mouseScrollDelta.y < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MaxScrollDistance)
         {
             aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * Input.mouseScrollDelta.y;
         }

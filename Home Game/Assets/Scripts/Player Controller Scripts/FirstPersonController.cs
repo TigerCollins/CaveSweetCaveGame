@@ -8,6 +8,10 @@ using UnityStandardAssets.ImageEffects;
 
 public class FirstPersonController : MonoBehaviour
 {
+
+    public static FirstPersonController instance;
+
+
     public GameObject HorizontalTurntable;
     public GameObject VerticalTurntable;
     public GameObject AimingReticle;
@@ -27,6 +31,7 @@ public class FirstPersonController : MonoBehaviour
     public float groundDistance;
 
     InputController inputController;
+    InteractionController interactionController;
 
     public float StepDistance;
     public float StepTracker;
@@ -39,6 +44,7 @@ public class FirstPersonController : MonoBehaviour
     {
         //Finding input controller on object
         inputController = GetComponent<InputController>();
+        interactionController = GetComponent<InteractionController>();
     }
 
     // Use this for initialization
@@ -82,18 +88,12 @@ public class FirstPersonController : MonoBehaviour
             {
                 //Vertical Camera Rotation
                 VerticalTurntable.transform.localRotation *= Quaternion.Euler(inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1), 0, 0);
+               
                 //Tracking verticle turntable looking
                 VerticleLookTracker += inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1);
             }
  
-            if((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") > 0))
-        {
-            print("cool");
-            yCameraSensitivity = 0;
-            xCameraSensitivity = 0;
-        }
-
-        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") < 0))
+        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") >=-1))
         {
             print("cool");
             yCameraSensitivity = 0;
