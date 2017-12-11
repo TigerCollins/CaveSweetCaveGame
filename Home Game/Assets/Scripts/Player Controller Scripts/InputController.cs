@@ -20,11 +20,27 @@ public class InputController : MonoBehaviour
             return Input.GetAxis("Axis 4");
         }
     }
+
+    public float xLookInput2
+    {
+        get
+        {
+            return Input.GetAxis("Mouse X");
+        }
+    }
     public float yLookInput
     {
         get
         {
             return Input.GetAxis("Axis 5");
+        }
+    }
+
+    public float yLookInput2
+    {
+        get
+        {
+            return Input.GetAxis("Mouse Y");
         }
     }
     public float xMoveInput
@@ -48,12 +64,29 @@ public class InputController : MonoBehaviour
             return Input.GetKeyDown("joystick button 0");
         }
     }
+
+    public bool jumpButtomDown2
+    {
+        get
+        {
+            return Input.GetKeyDown(KeyCode.Space);
+        }
+    }
+
     public float grabButtonDown
     {
         get
       {
             return Input.GetAxis("Axis 10");
       }
+    }
+
+    public bool grabButtonDown2
+    {
+        get
+        {
+            return Input.GetMouseButtonDown(0);
+        }
     }
 
     public bool glueButtonDown
@@ -64,11 +97,27 @@ public class InputController : MonoBehaviour
         }
     }
 
+    public bool glueButtonDown2
+    {
+        get
+        {
+            return Input.GetMouseButtonDown(1);
+        }
+    }
+
     public bool unstickButtonDown
     {
         get
         {
             return Input.GetKeyDown("joystick button 3");
+        }
+    }
+
+    public bool unstickButtonDown2
+    {
+        get
+        {
+            return Input.GetKeyDown(KeyCode.Z);
         }
     }
 
@@ -86,7 +135,7 @@ public class InputController : MonoBehaviour
 
     void LockAndHideCursor()
     {
-        if (Pause == false)
+      /*  if (Pause == false)
         {
             //Locking and hiding the cursor by default
             Cursor.lockState = CursorLockMode.Locked;
@@ -99,6 +148,7 @@ public class InputController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        */
     }
 
     public void ContinueButton()

@@ -21,6 +21,9 @@ public class BGMController : MonoBehaviour
 
     public List<AudioSource> BGMTracks;
 
+    public AudioSource CaveEnter;
+    public AudioSource CaveExit;
+
     public enum CurrentTrack
     {
         day,

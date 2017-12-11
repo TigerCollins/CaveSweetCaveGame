@@ -33,20 +33,58 @@ public class InteractionController : MonoBehaviour
     public GameObject OpenHandUI;
     public GameObject ClosedHandUI;
     public GameObject SleepUI;
+    public Image SleepFadeUI;
 
-    
+    public float FadeRate;
+    private float targetAlpha;
 
-        private void Awake()
+    public GameObject Reticle;
+    public GameObject RotateReticle;
+
+    private bool CanSleep = false;
+
+        void FadeOut()
+    {
+        if (CanSleep == true)
+        {
+            var tempColor = SleepFadeUI.color;
+
+            tempColor.a += 1.3f * Time.deltaTime;
+            if (tempColor.a >= 1f)
+            {
+                tempColor.a = 1f;
+                CanSleep = false;
+            }
+
+            SleepFadeUI.color = tempColor;
+       }
+        if (CanSleep == false)
+        {
+            var tempColor = SleepFadeUI.color;
+
+            tempColor.a -= .5f * Time.deltaTime;
+            if (tempColor.a <= 0f)
+            {
+                tempColor.a = 0f;
+            }
+
+            SleepFadeUI.color = tempColor;
+
+        }
+        
+    }
+
+    private void Awake()
         {
             //Link Controller Modules
             firstPersonController = GetComponent<FirstPersonController>();
             inputController = GetComponent<InputController>();
             playerController = GetComponent<PlayerController>();
         }
-
-        // Update is called once per frame
-        public void FixedUpdate()
-        {
+    private void Update()
+    {
+        FadeOut();
+        
         //Check to see if any relevent input has been triggered
         CheckInput();
 
@@ -54,6 +92,13 @@ public class InteractionController : MonoBehaviour
         {
             DepthOfField.instance.focalTransform = null;
             DepthOfField.instance.focalDistance01 = 14.82f;
+            Reticle.SetActive(false);
+            RotateReticle.SetActive(true);
+        }
+            else
+        {
+            Reticle.SetActive(true);
+            RotateReticle.SetActive(false);
         }
 
 
@@ -133,13 +178,15 @@ public class InteractionController : MonoBehaviour
         }
 
         //Keyboard Reticle Zoom
-        if (Input.mouseScrollDelta.y > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MinScrollDistance)
+        if (Input.mouseScrollDelta.y < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) > MinScrollDistance)
         {
+            print("Within Min Y");
             aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * Input.mouseScrollDelta.y;
         }
 
-        if (Input.mouseScrollDelta.y < 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MaxScrollDistance)
+        if (Input.mouseScrollDelta.y > 0 && Vector3.Distance(aimingReticle.transform.position, transform.position) < MaxScrollDistance)
         {
+            print("Within Max Y");
             aimingReticle.transform.position += firstPersonController.VerticalTurntable.transform.forward * Time.deltaTime * reticleZoomSpeed * Input.mouseScrollDelta.y;
         }
 
@@ -160,7 +207,17 @@ public class InteractionController : MonoBehaviour
                     TryDrop();
             }
 
-            if (inputController.glueButtonDown)
+        if (inputController.grabButtonDown2)
+        {
+            //If you dont have an object, try and grab one
+            if (grabbedObject == null)
+                TryGrab();
+            //If you do have an object try and drop it
+            else
+                TryDrop();
+        }
+
+        if (inputController.glueButtonDown)
             {
                 if (playerController.glueBerries > 0 && grabbedObject != null)
                 {
@@ -168,13 +225,27 @@ public class InteractionController : MonoBehaviour
                 }
             }
 
-            if (inputController.unstickButtonDown)
+
+        if (inputController.glueButtonDown2)
+        {
+            if (playerController.glueBerries > 0 && grabbedObject != null)
+            {
+                TryGlue();
+            }
+        }
+
+        if (inputController.unstickButtonDown)
             {
                 TryUnstick(grabbedObject);
             }
 
-
+        if (inputController.unstickButtonDown2)
+        {
+            TryUnstick(grabbedObject);
         }
+    }
+
+
 
         void TryGlue()
         {
@@ -264,7 +335,9 @@ public class InteractionController : MonoBehaviour
         {
             if (playerController.dayNightControl.currentTime < 0.25f || playerController.dayNightControl.currentTime > 0.75f)
             {
-                playerController.dayNightControl.currentTime = 0.25f;
+            CanSleep = true;
+            
+            playerController.dayNightControl.currentTime = 0.25f;
                 Debug.Log("Sleep");
             }
 
@@ -313,7 +386,8 @@ public class InteractionController : MonoBehaviour
 
         void DropObject()
         {
-            //Detach parent from player
+            
+        //Detach parent from player
             grabbedObject.transform.parent = null;
             //Turn on gravity
             grabbedObject.GetComponent<Rigidbody>().useGravity = true;
@@ -412,14 +486,24 @@ public class InteractionController : MonoBehaviour
                 grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.HorizontalTurntable.transform.up, rotationSpeed);
             }
 
-            //myQuaternion 
-            if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Horizontal") < 0))
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.Keypad4))
+        {
+            grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.HorizontalTurntable.transform.up, rotationSpeed);
+        }
+
+        //myQuaternion 
+        if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Horizontal") < 0))
         {
                 grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.HorizontalTurntable.transform.up, -rotationSpeed);
             }
 
-            //myQuaternion 
-            if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Keypad8) || (Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Vertical") < 0))
+        if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.Keypad6))
+        {
+            grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.HorizontalTurntable.transform.up, -rotationSpeed);
+        }
+
+        //myQuaternion 
+        if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.Keypad8) || (Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Vertical") < 0))
             {
                 grabbedObject.transform.RotateAround(grabbedObject.transform.position, firstPersonController.VerticalTurntable.transform.right, rotationSpeed);
             }

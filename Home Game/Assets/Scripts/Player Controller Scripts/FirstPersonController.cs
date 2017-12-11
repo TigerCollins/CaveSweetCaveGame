@@ -11,6 +11,7 @@ public class FirstPersonController : MonoBehaviour
 
     public static FirstPersonController instance;
 
+   
 
     public GameObject HorizontalTurntable;
     public GameObject VerticalTurntable;
@@ -40,6 +41,8 @@ public class FirstPersonController : MonoBehaviour
 
     public bool HoldingItems;
 
+    
+
     private void Awake()
     {
         //Finding input controller on object
@@ -66,21 +69,24 @@ public class FirstPersonController : MonoBehaviour
                     movementVector = Vector3.zero;
                 }
             }
-      //  }
-
-
         else
         {
             //Calculate Movement Vector
             movementVector = (HorizontalTurntable.transform.forward * inputController.yMoveInput) + (HorizontalTurntable.transform.right * inputController.xMoveInput);
         }
 
+      //  }
+
+
+       
+
 
             //Horizontal Camera Rotation
             HorizontalTurntable.transform.localRotation *= Quaternion.Euler(0, inputController.xLookInput * xCameraSensitivity * Time.deltaTime, 0);
+        HorizontalTurntable.transform.localRotation *= Quaternion.Euler(0, inputController.xLookInput2 * xCameraSensitivity * Time.deltaTime, 0);
 
-            //If the next step is gonna be over the cap, do not proceed. PS: i am god
-            if (VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) < minAngle || VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) > maxAngle)
+        //If the next step is gonna be over the cap, do not proceed. PS: i am god
+        if (VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) < minAngle || VerticleLookTracker + (inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) > maxAngle || VerticleLookTracker + (inputController.yLookInput2 * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) < minAngle || VerticleLookTracker + (inputController.yLookInput2 * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1)) > maxAngle)
             {
                 //Do nothing
             }
@@ -88,10 +94,12 @@ public class FirstPersonController : MonoBehaviour
             {
                 //Vertical Camera Rotation
                 VerticalTurntable.transform.localRotation *= Quaternion.Euler(inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1), 0, 0);
-               
-                //Tracking verticle turntable looking
-                VerticleLookTracker += inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1);
-            }
+            VerticalTurntable.transform.localRotation *= Quaternion.Euler(inputController.yLookInput2 * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? 1 : -1), 0, 0);
+
+            //Tracking verticle turntable looking
+            VerticleLookTracker += inputController.yLookInput * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1);
+            VerticleLookTracker += inputController.yLookInput2 * yCameraSensitivity * Time.deltaTime * (inputController.invertY ? -1 : 1);
+        }
  
         if ((Input.GetAxis("Axis 9") > 0) && (Input.GetAxis("Axis 5") >=-1))
         {
@@ -112,7 +120,10 @@ public class FirstPersonController : MonoBehaviour
 
         //Character Jumping
         if (inputController.jumpButtomDown && onGround)
-            GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddRelativeForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+        if (inputController.jumpButtomDown2 && onGround)
+            GetComponent<Rigidbody>().AddRelativeForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
         //Character Footsteps
         if (movementVector.magnitude > 0)

@@ -10,6 +10,7 @@ public class Cave_Exit : MonoBehaviour
         {
             other.gameObject.GetComponent<PlayerController>().inCave = false;
             PlayerController.instance.glueBerries = 3;
+            BGMController.instance.CaveExit.Play();
 
             if (PlayerController.instance.dayNightControl.currentTime > 0.25f && PlayerController.instance.dayNightControl.currentTime < 0.75f)
             {
