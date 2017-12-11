@@ -17,7 +17,7 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            return Input.GetAxis("Axis 4");
+            return Input.GetAxis("Axis 4") * 10f;
         }
     }
 
@@ -32,7 +32,7 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            return Input.GetAxis("Axis 5");
+            return Input.GetAxis("Axis 5") *10f;
         }
     }
 

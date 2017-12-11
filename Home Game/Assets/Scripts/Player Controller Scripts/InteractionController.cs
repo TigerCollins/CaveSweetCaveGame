@@ -92,12 +92,10 @@ public class InteractionController : MonoBehaviour
         {
             DepthOfField.instance.focalTransform = null;
             DepthOfField.instance.focalDistance01 = 14.82f;
-            Reticle.SetActive(false);
             RotateReticle.SetActive(true);
         }
             else
         {
-            Reticle.SetActive(true);
             RotateReticle.SetActive(false);
         }
 
@@ -287,49 +285,73 @@ public class InteractionController : MonoBehaviour
             }
         }
 
-        void TryGrab()
+    void TryGrab()
+    {
+        //Creates a ray point out from the characters camera
+        Ray ray = new Ray(firstPersonController.VerticalTurntable.transform.position, firstPersonController.VerticalTurntable.transform.forward);
+        RaycastHit hit;
+        //If the ray hits something
+        if (Physics.Raycast(ray, out hit))
         {
-            //Creates a ray point out from the characters camera
-            Ray ray = new Ray(firstPersonController.VerticalTurntable.transform.position, firstPersonController.VerticalTurntable.transform.forward);
-            RaycastHit hit;
-            //If the ray hits something
-            if (Physics.Raycast(ray, out hit))
+            float distance = (hit.collider.transform.position - this.transform.position).magnitude;
+
+            if (playerController.dayNightControl.currentTime < 0.25f || playerController.dayNightControl.currentTime > 0.75f)
             {
-                float distance = (hit.collider.transform.position - this.transform.position).magnitude;
-
-                if (distance < maxGrabDistance)
+                if (PlayerController.instance.inCave == true)
                 {
-                    //and its tagged as a block
-                    if (hit.collider.tag == "block" && playerController.strength > hit.collider.gameObject.GetComponent<Entity>().weight)
+                    if (distance < maxGrabDistance)
                     {
-                        //Grab the object
-                        GrabObject(hit.collider.gameObject);
-                    }
-
-                    //If it clicks on a berry instead
-                    if (hit.collider.tag == "berry")
-                    {
-                        //Grab the berry
-                        hit.collider.gameObject.GetComponent<Berry>().Activate(playerController);
-                    }
-
-
-                    if (hit.collider.tag == "Bed")
-                    {
-                        if (playerController.dayNightControl.currentTime < 0.25f || playerController.dayNightControl.currentTime > 0.75f)
+                        //and its tagged as a block
+                        if (hit.collider.tag == "block" && playerController.strength > hit.collider.gameObject.GetComponent<Entity>().weight)
                         {
-                            Sleep();
+                            //Grab the object
+                            GrabObject(hit.collider.gameObject);
                         }
 
-                        if (playerController.dayNightControl.currentTime > 0.25f && playerController.dayNightControl.currentTime < 0.75f)
+                        if (hit.collider.tag == "Bed")
                         {
-                            GrabObject(hit.collider.gameObject);
+                            if (playerController.dayNightControl.currentTime < 0.25f || playerController.dayNightControl.currentTime > 0.75f)
+                            {
+                                Sleep();
+                            }
+
+                            if (playerController.dayNightControl.currentTime > 0.25f && playerController.dayNightControl.currentTime < 0.75f)
+                            {
+                                GrabObject(hit.collider.gameObject);
+                            }
                         }
                     }
                 }
-
             }
+            else
+            {
+                    if (distance < maxGrabDistance)
+                    {
+                        //and its tagged as a block
+                        if (hit.collider.tag == "block" && playerController.strength > hit.collider.gameObject.GetComponent<Entity>().weight)
+                        {
+                            //Grab the object
+                            GrabObject(hit.collider.gameObject);
+                        }
+
+                        if (hit.collider.tag == "Bed")
+                        {
+                            if (playerController.dayNightControl.currentTime < 0.25f || playerController.dayNightControl.currentTime > 0.75f)
+                            {
+                                Sleep();
+                            }
+
+                            if (playerController.dayNightControl.currentTime > 0.25f && playerController.dayNightControl.currentTime < 0.75f)
+                            {
+                                GrabObject(hit.collider.gameObject);
+                            }
+                        }
+                    }
+            }
+
+           
         }
+    }
 
         void Sleep()
         {
